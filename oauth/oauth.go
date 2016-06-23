@@ -21,14 +21,14 @@ func New(cfg Config) *Plugin {
 	return &Plugin{Config: c}
 }
 
-// OnSuccess registers handler(s) which fires when the user logged in successfully
-func (p *Plugin) OnSuccess(handlersFn ...iris.HandlerFunc) {
+// Success registers handler(s) which fires when the user logged in successfully
+func (p *Plugin) Success(handlersFn ...iris.HandlerFunc) {
 	p.successHandlers = append(p.successHandlers, handlersFn...)
 }
 
-// OnFail registers handler which fires when the user failed to logged in
+// Fail registers handler which fires when the user failed to logged in
 // underhood it justs registers an error handler to the StatusUnauthorized(400 status code), same as 'iris.OnError(400,handler)'
-func (p *Plugin) OnFail(handler iris.HandlerFunc) {
+func (p *Plugin) Fail(handler iris.HandlerFunc) {
 	p.failHandler = handler
 }
 
