@@ -7,8 +7,6 @@ You can contribute also, just make a pull request, try to keep conversion, confi
 
 ## How can I install a plugin?
 
-## Install
-
 ```sh
 $ go get -u github.com/iris-contrib/plugin/$FOLDERNAME
 ```
