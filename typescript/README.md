@@ -12,6 +12,12 @@ This is an Iris and typescript bridge plugin.
 
 > Note: Ignore all typescript files & projects whose path has '/node_modules/'
 
+## Install
+
+```sh
+$ go get -u github.com/iris-contrib/plugin/typescript
+```
+
 
 ## Options
 

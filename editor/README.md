@@ -10,6 +10,13 @@ Iris gives you the opportunity to edit your client-side using the alm-tools edit
 
 This plugin starts it's own server, if Iris server is using TLS then the editor will use the same key and cert.
 
+
+## Install
+
+```sh
+$ go get -u github.com/iris-contrib/plugin/editor
+```
+
 ## How to use
 
 ```go

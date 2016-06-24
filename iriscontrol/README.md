@@ -2,6 +2,12 @@
 
 Iris control is a plugin which gives you a little control over your Iris station.
 
+## Install
+
+```sh
+$ go get -u github.com/iris-contrib/plugin/iriscontrol
+```
+
 
 ```go
 iris.Plugins.Add(iriscontrol.New(PORT, AUTHENTICATED_USERS))
