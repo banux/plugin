@@ -34,8 +34,8 @@ import (
 
 const (
 
-	// DefaultPath /auth
-	DefaultPath = "/auth"
+	// DefaultPath /oauth
+	DefaultPath = "/oauth"
 	// DefaultRouteName oauth
 	DefaultRouteName = "oauth"
 	// DefaultContextKey oauth_user

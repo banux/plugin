@@ -12,6 +12,7 @@ type Plugin struct {
 	Config          Config
 	successHandlers []iris.HandlerFunc
 	failHandler     iris.HandlerFunc
+	station         *iris.Framework
 }
 
 // New returns a new OAuth plugin
@@ -39,18 +40,29 @@ func (p *Plugin) User(ctx *iris.Context) (u goth.User) {
 	return ctx.Get(p.Config.ContextKey).(goth.User)
 }
 
+// URL returns the full URL of a provider
+// Use this method to get the url which you will render on your html page to create a link for user authentication
+//
+// same as `iris.URL(config's RouteName field, "theprovidername")`
+// notes:
+// If you use the Iris' view system then you can use the {{url }} func inside your template directly:
+// {{ url config's RouteName field, "theprovidername"}} |  example: {{url "oauth" "facebook"}}, "oauth" is ,also, the route's name , so this will give the http(s)://yourhost:port/oauth/facebook
+func (p *Plugin) URL(providerName string) string {
+	return p.station.URL(p.Config.RouteName, providerName)
+}
+
 // PreListen init the providers and the routes before server's listens
 func (p *Plugin) PreListen(s *iris.Framework) {
 	oauthProviders := p.Config.GenerateProviders(s.HTTPServer.FullHost())
 	if len(oauthProviders) > 0 {
 		goth.UseProviders(oauthProviders...)
-		// set the mux path to handle these providers
+		// set the mux path to handle the registered providers
 		s.Get(p.Config.Path+"/:provider", func(ctx *iris.Context) {
 			err := gothic.BeginAuthHandler(ctx)
 			if err != nil {
 				s.Logger.Warningf("\n[IRIS OAUTH MIDDLEWARE] Error:" + err.Error())
 			}
-		})
+		})(p.Config.RouteName)
 
 		authMiddleware := func(ctx *iris.Context) {
 			user, err := gothic.CompleteUserAuth(ctx)
@@ -65,8 +77,8 @@ func (p *Plugin) PreListen(s *iris.Framework) {
 
 		p.successHandlers = append([]iris.HandlerFunc{authMiddleware}, p.successHandlers...)
 
-		s.Get(p.Config.Path+"/:provider/callback", p.successHandlers...)(p.Config.RouteName)
-
+		s.Get(p.Config.Path+"/:provider/callback", p.successHandlers...)
+		p.station = s
 		// register the error handler
 		if p.failHandler != nil {
 			s.OnError(iris.StatusUnauthorized, p.failHandler)
