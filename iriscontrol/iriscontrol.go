@@ -134,7 +134,7 @@ func (i *iriscontrol) initializeChild() {
 	i.child.Get("/", func(ctx *iris.Context) {
 		ctx.MustRender("index.html", iris.Map{
 			"ServerIsRunning":      i.parentIsRunning(),
-			"Host":                 i.child.Config.Server.ListeningAddr,
+			"Host":                 i.child.Servers.Main().Config.ListeningAddr,
 			"Routes":               i.parentLookups(),
 			"Plugins":              i.infoPlugins(),
 			"LastOperationDateStr": i.infoLastOp(),
@@ -146,7 +146,7 @@ func (i *iriscontrol) initializeChild() {
 		if !i.parentIsRunning() {
 			// starts the server with its old configuration
 			go func() {
-				if err := i.parent.HTTPServer.Open(); err != nil {
+				if err := i.parent.Servers.OpenAll(); err != nil {
 					i.parent.Logger.Warningf(err.Error())
 				}
 			}()
@@ -161,18 +161,18 @@ func (i *iriscontrol) initializeChild() {
 			i.parentLastOp = time.Now()
 
 			go func() {
-				if err := i.parent.CloseWithErr(); err != nil {
+				if err := i.parent.Close(); err != nil {
 					i.parent.Logger.Warningf(err.Error())
 				}
 			}()
 		}
 	})
 
-	go i.child.Listen(i.parent.HTTPServer.VirtualHostname() + ":" + strconv.Itoa(i.port))
+	go i.child.Listen(i.parent.Servers.Main().VirtualHostname() + ":" + strconv.Itoa(i.port))
 }
 
 func (i *iriscontrol) parentIsRunning() bool {
-	return i.parent != nil && i.parent.HTTPServer.IsListening()
+	return i.parent != nil && i.parent.Servers.Main().IsListening()
 }
 
 func (i *iriscontrol) parentLookups() []iris.Route {

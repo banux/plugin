@@ -83,11 +83,12 @@ func (e *Plugin) GetDescription() string {
 // PreListen runs before the server's listens, saves the keyfile,certfile and the host from the Iris station to listen for
 func (e *Plugin) PreListen(s *iris.Framework) {
 	e.logger = s.Logger
-	e.keyfile = s.Config.Server.KeyFile
-	e.certfile = s.Config.Server.CertFile
+	mainServer := s.Servers.Main()
+	e.keyfile = mainServer.Config.KeyFile
+	e.certfile = mainServer.Config.CertFile
 
 	if e.config.Host == "" {
-		e.config.Host = s.HTTPServer.VirtualHostname()
+		e.config.Host = mainServer.VirtualHostname()
 	}
 	e.start()
 }
