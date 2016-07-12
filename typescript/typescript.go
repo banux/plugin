@@ -6,10 +6,10 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/iris-contrib/logger"
 	"github.com/iris-contrib/npm"
 	"github.com/iris-contrib/plugin/editor"
 	"github.com/kataras/iris"
-	"github.com/kataras/iris/logger"
 	"github.com/kataras/iris/utils"
 )
 

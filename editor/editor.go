@@ -10,9 +10,9 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/iris-contrib/logger"
 	"github.com/iris-contrib/npm"
 	"github.com/kataras/iris"
-	"github.com/kataras/iris/logger"
 	"github.com/kataras/iris/utils"
 )
 
@@ -88,7 +88,7 @@ func (e *Plugin) PreListen(s *iris.Framework) {
 	e.certfile = mainServer.Config.CertFile
 
 	if e.config.Host == "" {
-		e.config.Host = mainServer.VirtualHostname()
+		e.config.Host = mainServer.Hostname()
 	}
 	e.start()
 }

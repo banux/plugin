@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/iris-contrib/middleware/basicauth"
+	"github.com/iris-contrib/template/html"
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/websocket"
 )
@@ -92,7 +93,7 @@ func (i *iriscontrol) listen(f *iris.Framework) {
 func (i *iriscontrol) initializeChild() {
 	i.child = iris.New()
 	i.child.Config.DisableBanner = true
-	i.child.Config.Render.Template.Directory = assetsPath + "templates"
+	i.child.UseEngine(html.New()).Directory(assetsPath+"templates", ".html")
 	i.child.Config.Websocket.Endpoint = "/ws"
 
 	// set the assets
