@@ -2,6 +2,9 @@
 // use this plugin with your own risk.
 // Note: This router is not fast as the original, I'm not putting too much efford here, it is used only for special cases only when you don't care so much about router's performanrce.
 // It is used only on the routes you register with optional parameters, this will not reduce the performanrce of the rest of your routes.
+
+// THIS IS NOT COMPLETED YET, not even started.
+
 package ryan
 
 import (

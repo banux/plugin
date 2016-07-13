@@ -59,7 +59,7 @@ var _ IrisControl = &iriscontrol{}
 
 func (i *iriscontrol) listen(f *iris.Framework) {
 	// set the path logger to the parent which will send the log via websocket to the browser
-	f.MustUseFunc(func(ctx *iris.Context) {
+	f.UseGlobalFunc(func(ctx *iris.Context) {
 		status := ctx.Response.StatusCode()
 		path := ctx.PathString()
 		method := ctx.MethodString()
@@ -93,7 +93,7 @@ func (i *iriscontrol) listen(f *iris.Framework) {
 func (i *iriscontrol) initializeChild() {
 	i.child = iris.New()
 	i.child.Config.DisableBanner = true
-	i.child.UseEngine(html.New()).Directory(assetsPath+"templates", ".html")
+	i.child.UseTemplate(html.New()).Directory(assetsPath+"templates", ".html")
 	i.child.Config.Websocket.Endpoint = "/ws"
 
 	// set the assets
