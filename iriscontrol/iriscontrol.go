@@ -7,7 +7,6 @@ import (
 	"github.com/iris-contrib/middleware/basicauth"
 	"github.com/iris-contrib/template/html"
 	"github.com/kataras/iris"
-	"github.com/kataras/iris/websocket"
 )
 
 type (
@@ -28,7 +27,7 @@ type (
 		clients clients
 	}
 
-	clients []websocket.Connection
+	clients []iris.WebsocketConnection
 
 	pluginInfo struct {
 		Name        string
@@ -119,7 +118,7 @@ func (i *iriscontrol) initializeChild() {
 		auth.Serve(ctx)
 	})
 
-	i.child.Websocket.OnConnection(func(c websocket.Connection) {
+	i.child.Websocket.OnConnection(func(c iris.WebsocketConnection) {
 		// add the client to the list
 		i.clients = append(i.clients, c)
 		c.OnDisconnect(func() {
